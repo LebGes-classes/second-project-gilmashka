@@ -1,11 +1,15 @@
 import java.util.ArrayList;
 
 public class Warehouse extends WorkPlace{
+    // поля и конструкторы
     int ID;
+    String name;
     ArrayList<WarehouseCell> Cells = new ArrayList<>();
+    private static int quantityOfWarehouses = 0;
 
-    public Warehouse(int ID) {
-        this.ID = ID;
+    public Warehouse(String name) {
+        this.name = name;
+        this.ID = quantityOfWarehouses++;
     }
 
     //метод с отметками в консоли о возможности доставки товара на склад
@@ -41,7 +45,7 @@ public class Warehouse extends WorkPlace{
                         Cells.remove(cell);
                         System.out.println("ячейка освобождена");
                     }
-                    return;  // <-- Важно: выход после обработки
+                    return;
                 }
             }
             System.out.println("товар не найден");
@@ -68,11 +72,13 @@ public class Warehouse extends WorkPlace{
         }
         return false;
     }
+    @Override
     public void info(){
         System.out.println("информация о складе " + this.ID + "\n"
                 + "ответственное лицо " + this.workingEmployee.name + "\n"
                 + "количество ячеек " + this.Cells.size());
     }
+    @Override
     public void showProducts() {
         if (isEmpty()) {
             System.out.println("Нет ответственного лица для просмотра содержимого.");
@@ -83,10 +89,20 @@ public class Warehouse extends WorkPlace{
             System.out.println("- " + cell.product.name + " (ID: " + cell.product.ID + "): " + cell.quantity + " шт.");
         }
     }
-    @Override
     public void close() {
-        super.close();  // Увольняем сотрудника
-        Cells.clear();
-        System.out.println("товары со склада удалены, склад закрыт");
+        if (!isEmpty()) {
+            System.out.println("уволен сотрудник: " + workingEmployee.name);
+            workingEmployee = null;
+        }
+        System.out.println(this.getClass().getSimpleName() + " закрыт.");
     }
+    @Override
+    public String toString() {
+        return name;
+    }
+    Employee workingEmployee = null;
+    public boolean isEmpty() {
+        return this.workingEmployee == null;
+    }
+
 }

@@ -4,9 +4,9 @@ public class Product {
     int ID;
     String name;
     int price;
-    private static int quantityOfProduct = 0;  // private
+    private static int quantityOfProduct = 0;
 
-    public Product(String name, int price) {  // ID теперь генерируется автоматически
+    public Product(String name, int price) {
         this.ID = quantityOfProduct++;
         this.name = name;
         this.price = price;
@@ -22,6 +22,11 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return Objects.hash(ID);  // Обязательно при переопределении equals()
+        return Objects.hash(ID);
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + ID;
     }
 }

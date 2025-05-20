@@ -108,11 +108,20 @@ public class SalesPoint extends WorkPlace{
             System.out.println("- " + entry.getKey().name + " (ID: " + entry.getKey().ID + "): " + entry.getValue() + " шт.");
         }
     }
-    @Override
     public void close() {
-        super.close();  // Увольняем сотрудника
-        salesProducts.clear();
-        totalRevenue = 0;
-        System.out.println("товары удалены, выручка обнулена, пункт продаж закрыт");
+        if (!isEmpty()) {
+            System.out.println("уволен сотрудник: " + workingEmployee.name);
+            workingEmployee = null;
+        }
+        System.out.println(this.getClass().getSimpleName() + " закрыт.");
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+    Employee workingEmployee = null;
+    public boolean isEmpty() {
+        return this.workingEmployee == null;
     }
 }

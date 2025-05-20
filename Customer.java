@@ -23,4 +23,8 @@ public class Customer {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return name + " " + ID;
+    }
 }

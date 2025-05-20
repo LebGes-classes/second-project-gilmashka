@@ -8,10 +8,18 @@ public class Employee {
         this.name = name;
         this.ID = quantityOfEmployees++;
     }
-    //метод найма сотрудника на склад
-    public void hireAnEmployee(WorkPlace workPlace){
-        if(workPlace.isEmpty()){
-            workPlace.workingEmployee = this;
+    public void hireAnEmployeeOnWH(Warehouse warehouse){
+        if(warehouse.isEmpty()){
+            warehouse.workingEmployee = this;
+            System.out.println("сотрудник по имени " + this.name + " успешно нанят");
+        }
+        else{
+            System.out.println("свободных вакансий нет");
+        }
+    }
+    public void hireAnEmployeeOnSP(SalesPoint salesPoint){
+        if(salesPoint.isEmpty()){
+            salesPoint.workingEmployee = this;
             System.out.println("сотрудник по имени " + this.name + " успешно нанят");
         }
         else{
@@ -19,10 +27,21 @@ public class Employee {
         }
     }
     //метод увольнения сотрудников
-    public void fireEmployee(WorkPlace workPlace) {
-        if(!workPlace.isEmpty()){
-            System.out.println("Сотрудник " + workPlace.workingEmployee.name + " уволен");
-            workPlace.workingEmployee = null;
+    public void fireEmployeeWH(Warehouse warehouse) {
+        if(!warehouse.isEmpty()){
+            System.out.println("Сотрудник " + warehouse.workingEmployee.name + " уволен");
+            warehouse.workingEmployee = null;
         }
+    }
+    public void fireEmployeeSP(SalesPoint salesPoint) {
+        if(!salesPoint.isEmpty()){
+            System.out.println("Сотрудник " + salesPoint.workingEmployee.name + " уволен");
+            salesPoint.workingEmployee = null;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
