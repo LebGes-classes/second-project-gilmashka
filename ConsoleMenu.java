@@ -1,20 +1,23 @@
-import org.w3c.dom.ls.LSOutput;
-
-import javax.swing.*;
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class ConsoleMenu {
-    ArrayList<Warehouse> warehouses = new ArrayList<>();
-    ArrayList<SalesPoint> salesPoints = new ArrayList<>();
-    ArrayList<Employee> employees = new ArrayList<>();
-    ArrayList<Product> products = new ArrayList<>();
-    ArrayList<Customer> customers = new ArrayList<>();
+    private AppData appData;
     Scanner scanner = new Scanner(System.in);
+
+    public ConsoleMenu(){
+        this.appData = DataManager.loadData();
+        if(this.appData == null){
+            this.appData = new AppData();
+        }
+    }
     public void mainMenu(){
         while(true){
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                DataManager.saveData(appData);
+            }));
+
             System.out.println("====Главное Меню====\n" + "1 -> Управление складами\n" + "2 -> Управление пунктами продаж\n" +
                     "3 -> Управление работниками\n" + "4 -> Управление товаром\n" + "5 -> Управление покупателями\n" +
                     "0 -> Выход из программы");
@@ -52,7 +55,7 @@ public class ConsoleMenu {
     private void openWarehouse(){
         System.out.println("Введите название создаваемого склада");
         String warehouseName = scanner.nextLine();
-        for(Warehouse i: warehouses){
+        for(Warehouse i: appData.warehouses){
             if(i.name.equals(warehouseName)){
                 System.out.println("данное имя уже занято, попробуйте другое");
                 return;
@@ -62,14 +65,14 @@ public class ConsoleMenu {
             System.out.println("имя склада не может быть пустой строкой");
             return;
         }
-        warehouses.add(new Warehouse(warehouseName));
+        appData.warehouses.add(new Warehouse(warehouseName));
         System.out.println("склад создан");
     }
     private void closeWarehouse(){
         System.out.println("введите имя склада, который необходимо закрыть");
         String warehouseName = scanner.nextLine();
         Warehouse warehouseToClose = null;
-        for(Warehouse i: warehouses){
+        for(Warehouse i: appData.warehouses){
             if(i.name.equals(warehouseName)){
                 warehouseToClose = i;
                 break;
@@ -77,7 +80,7 @@ public class ConsoleMenu {
         }
         if(warehouseToClose != null){
             warehouseToClose.close();
-            warehouses.remove(warehouseToClose);
+            appData.warehouses.remove(warehouseToClose);
             System.out.println("успешно удалено");
         }
         else{
@@ -88,7 +91,7 @@ public class ConsoleMenu {
         System.out.println("введите имя склада, информацию о котором необходимо вывести");
         String  warehouseName = scanner.nextLine();
         Warehouse warehouseToINfo = null;
-        for(Warehouse i: warehouses){
+        for(Warehouse i: appData.warehouses){
             if(i.name.equals(warehouseName)){
                 warehouseToINfo = i;
             }
@@ -104,7 +107,7 @@ public class ConsoleMenu {
         System.out.println("введите имя склада, информацию о хранилище которого необходимо вывести");
         String warehouseName = scanner.nextLine();
         Warehouse warehouseToInfo = null;
-        for(Warehouse i: warehouses){
+        for(Warehouse i: appData.warehouses){
             if(i.name.equals(warehouseName)){
                 warehouseToInfo = i;
             }
@@ -117,8 +120,8 @@ public class ConsoleMenu {
         }
     }
     private void listWH(){
-        for(Warehouse i: warehouses){
-            System.out.print(i.toString() + " ");
+        for(Warehouse i: appData.warehouses){
+            System.out.print(i.toString() + " | ");
         }
         System.out.println();
     }
@@ -147,7 +150,7 @@ public class ConsoleMenu {
     private void openSalesPoint(){
         System.out.println("Введите название создаваемого магазина");
         String salesPointName = scanner.nextLine();
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             if(i.name.equals(salesPointName)){
                 System.out.println("данное имя уже занято, попробуйте другое");
                 return;
@@ -157,14 +160,14 @@ public class ConsoleMenu {
             System.out.println("имя магазина не может быть пустой строкой");
             return;
         }
-        salesPoints.add(new SalesPoint(salesPointName));
+        appData.salesPoints.add(new SalesPoint(salesPointName));
         System.out.println("магазин создан");
     }
     private void closeSalesPoint(){
         System.out.println("введите имя магазина, который необходимо закрыть");
         String salesPointName = scanner.nextLine();
         SalesPoint salesPointToClose = null;
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             if(i.name.equals(salesPointName)){
                 salesPointToClose = i;
                 break;
@@ -172,7 +175,7 @@ public class ConsoleMenu {
         }
         if(salesPointToClose != null){
             salesPointToClose.close();
-            salesPoints.remove(salesPointToClose);
+            appData.salesPoints.remove(salesPointToClose);
             System.out.println("успешно удалено");
         }
         else{
@@ -183,7 +186,7 @@ public class ConsoleMenu {
         System.out.println("введите имя магазина, информацию о котором необходимо вывести");
         String salesPointName = scanner.nextLine();
         SalesPoint salesPointToINfo = null;
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             if(i.name.equals(salesPointName)){
                 salesPointToINfo = i;
             }
@@ -199,7 +202,7 @@ public class ConsoleMenu {
         System.out.println("введите имя магазина, информацию о хранилище которого необходимо вывести");
         String salesPointName = scanner.nextLine();
         SalesPoint salesPointToInfo = null;
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             if(i.name.equals(salesPointName)){
                 salesPointToInfo = i;
             }
@@ -212,7 +215,7 @@ public class ConsoleMenu {
         }
     }
     private void listSP(){
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             System.out.print(i.toString() + " ");
         }
         System.out.println();
@@ -243,7 +246,7 @@ public class ConsoleMenu {
     private void createEmployee(){
         System.out.println("введите имя сотрудника");
         String employeeName = scanner.nextLine();
-        for(Employee i: employees){
+        for(Employee i: appData.employees){
             if(i.name.equals(employeeName)){
                 System.out.println("данное имя занято, попробуйте другое");
                 return;
@@ -253,7 +256,7 @@ public class ConsoleMenu {
             System.out.println("имя сотрудника не может быть пустой строкой");
             return;
         }
-        employees.add(new Employee(employeeName));
+        appData.employees.add(new Employee(employeeName));
         System.out.println("сотрудник зарегистрирован");
     }
     private void hireWH(){
@@ -261,7 +264,7 @@ public class ConsoleMenu {
         listEP();
         String choiseEP = scanner.nextLine();
         Employee choiseToHireEP = null;
-        for(Employee i: employees){
+        for(Employee i: appData.employees){
             if(i.name.equals(choiseEP)){
                 choiseToHireEP = i;
             }
@@ -274,7 +277,7 @@ public class ConsoleMenu {
         listWH();
         String choiseWH = scanner.nextLine();
         Warehouse choiseToHireWH = null;
-        for(Warehouse i: warehouses){
+        for(Warehouse i: appData.warehouses){
             if(i.name.equals(choiseWH)){
                 choiseToHireWH = i;
             }
@@ -290,7 +293,7 @@ public class ConsoleMenu {
         listEP();
         String choiseEP = scanner.nextLine();
         Employee choiseToFireEP = null;
-        for(Employee i: employees){
+        for(Employee i: appData.employees){
             if(i.name.equals(choiseEP)){
                 choiseToFireEP = i;
             }
@@ -303,7 +306,7 @@ public class ConsoleMenu {
         listWH();
         String choiseWH = scanner.nextLine();
         Warehouse choiseToFireWH = null;
-        for(Warehouse i: warehouses){
+        for(Warehouse i: appData.warehouses){
             if(i.name.equals(choiseWH)){
                 choiseToFireWH = i;
             }
@@ -319,7 +322,7 @@ public class ConsoleMenu {
         listEP();
         String choiseEP = scanner.nextLine();
         Employee choiseToHireEP = null;
-        for(Employee i: employees){
+        for(Employee i: appData.employees){
             if(i.name.equals(choiseEP)){
                 choiseToHireEP = i;
             }
@@ -332,7 +335,7 @@ public class ConsoleMenu {
         listSP();
         String choiseSP = scanner.nextLine();
         SalesPoint choiseToHireSP = null;
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             if(i.name.equals(choiseSP)){
                 choiseToHireSP = i;
             }
@@ -348,7 +351,7 @@ public class ConsoleMenu {
         listEP();
         String choiseEP = scanner.nextLine();
         Employee choiseToFireEP = null;
-        for(Employee i: employees){
+        for(Employee i: appData.employees){
             if(i.name.equals(choiseEP)){
                 choiseToFireEP = i;
             }
@@ -361,7 +364,7 @@ public class ConsoleMenu {
         listSP();
         String choiseSP = scanner.nextLine();
         SalesPoint choiseToFireSP = null;
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             if(i.name.equals(choiseSP)){
                 choiseToFireSP = i;
             }
@@ -373,7 +376,7 @@ public class ConsoleMenu {
         choiseToFireEP.fireEmployeeSP(choiseToFireSP);
     }
     private void listEP(){
-        for(Employee i: employees){
+        for(Employee i: appData.employees){
             System.out.println(i.toString() + " ");
         }
     }
@@ -402,14 +405,17 @@ public class ConsoleMenu {
         }
     }
     private void createProduct(){
-        System.out.println("Введите сначала наименование продукта, а потом его цену");
+        System.out.println("Введите сначала наименование продукта, а потом его цену, щатем его ID");
         String inputName = scanner.nextLine();
         int inputQuantity = scanner.nextInt();
-        products.add(new Product(inputName, inputQuantity));
+        scanner.nextLine();
+        int inputID = scanner.nextInt();
+        scanner.nextLine();
+        appData.products.add(new Product(inputName, inputQuantity));
         System.out.println("успешно создано");
     }
     private void listPR(){
-        for(Product i: products){
+        for(Product i: appData.products){
             System.out.print(i.toString() + " ");
             System.out.print("|");
         }
@@ -421,7 +427,7 @@ public class ConsoleMenu {
         int inputProduct = scanner.nextInt();
         scanner.nextLine();
         Product addingProduct = null;
-        for(Product i: products){
+        for(Product i: appData.products){
             if(i.ID == inputProduct){
                 addingProduct = i;
                 break;
@@ -435,7 +441,7 @@ public class ConsoleMenu {
         listWH();
         String inputWarehouse = scanner.nextLine();
         Warehouse addingWarehouse = null;
-        for(Warehouse i: warehouses){
+        for(Warehouse i: appData.warehouses){
             if(i.name.equals(inputWarehouse)){
                 addingWarehouse = i;
             }
@@ -455,7 +461,7 @@ public class ConsoleMenu {
         listWH();
         String inputWarehouse = scanner.nextLine();
         Warehouse addingWarehouse = null;
-        for(Warehouse i: warehouses){
+        for(Warehouse i: appData.warehouses){
             if(i.name.equals(inputWarehouse)){
                 addingWarehouse = i;
             }
@@ -468,7 +474,7 @@ public class ConsoleMenu {
         listSP();
         String choiseSP = scanner.nextLine();
         SalesPoint choiseToHireSP = null;
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             if(i.name.equals(choiseSP)){
                 choiseToHireSP = i;
             }
@@ -482,7 +488,7 @@ public class ConsoleMenu {
         int inputProduct = scanner.nextInt();
         scanner.nextLine();
         Product addingProduct = null;
-        for(Product i: products){
+        for(Product i: appData.products){
             if(i.ID == inputProduct){
                 addingProduct = i;
                 break;
@@ -503,7 +509,7 @@ public class ConsoleMenu {
         listSP();
         String choiseSP = scanner.nextLine();
         SalesPoint choiseToHireSP = null;
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             if(i.name.equals(choiseSP)){
                 choiseToHireSP = i;
             }
@@ -517,7 +523,7 @@ public class ConsoleMenu {
         int inputProduct = scanner.nextInt();
         scanner.nextLine();
         Product addingProduct = null;
-        for(Product i: products){
+        for(Product i: appData.products){
             if(i.ID == inputProduct){
                 addingProduct = i;
                 break;
@@ -535,7 +541,7 @@ public class ConsoleMenu {
         int inputCM = scanner.nextInt();
         scanner.nextLine();
         Customer toSale = null;
-        for (Customer i: customers){
+        for (Customer i: appData.customers){
             if(i.ID == inputCM){
                 toSale = i;
             }
@@ -551,7 +557,7 @@ public class ConsoleMenu {
         listSP();
         String choiseSP = scanner.nextLine();
         SalesPoint choiseToHireSP = null;
-        for(SalesPoint i: salesPoints){
+        for(SalesPoint i: appData.salesPoints){
             if(i.name.equals(choiseSP)){
                 choiseToHireSP = i;
             }
@@ -565,7 +571,7 @@ public class ConsoleMenu {
         int inputProduct = scanner.nextInt();
         scanner.nextLine();
         Product addingProduct = null;
-        for(Product i: products){
+        for(Product i: appData.products){
             if(i.ID == inputProduct){
                 addingProduct = i;
                 break;
@@ -583,7 +589,7 @@ public class ConsoleMenu {
         int inputCM = scanner.nextInt();
         scanner.nextLine();
         Customer toSale = null;
-        for (Customer i: customers){
+        for (Customer i: appData.customers){
             if(i.ID == inputCM){
                 toSale = i;
             }
@@ -606,7 +612,7 @@ public class ConsoleMenu {
                 System.out.println("введите имя покупателя");
                 String name = scanner.nextLine();
                 if(!name.isBlank()){
-                    customers.add(new Customer(name));
+                    appData.customers.add(new Customer(name));
                     System.out.println("успешно добавлено");
                 }
                 else {
@@ -617,7 +623,7 @@ public class ConsoleMenu {
         }
     }
     private void listCM(){
-        for(Customer i: customers){
+        for(Customer i: appData.customers){
             System.out.println(i.toString() + " | ");
         }
         System.out.println();

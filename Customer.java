@@ -1,10 +1,16 @@
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.HashMap;
 
 public class Customer {
     //поля и конструктор класса
+    @JsonProperty
     int ID;
+    @JsonProperty
     String name;
-    HashMap<Product, Integer> listOfProduct = new HashMap<>();
+    @JsonProperty
+    HashMap<Product, Integer> listOfProduct = new HashMap<Product, Integer>();
+    @JsonProperty
     private static int quantityOfCustomers;
 
     public Customer(String name) {
@@ -26,5 +32,8 @@ public class Customer {
     @Override
     public String toString() {
         return name + " " + ID;
+    }
+
+    public Customer() {
     }
 }

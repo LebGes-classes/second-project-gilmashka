@@ -1,9 +1,16 @@
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.Period;
 import java.util.Objects;
 
 public class Product {
+    @JsonProperty
     int ID;
+    @JsonProperty
     String name;
+    @JsonProperty
     int price;
+    @JsonProperty
     private static int quantityOfProduct = 0;
 
     public Product(String name, int price) {
@@ -29,4 +36,5 @@ public class Product {
     public String toString() {
         return name + " " + ID;
     }
+    public Product(){}
 }

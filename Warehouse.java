@@ -1,10 +1,16 @@
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 
-public class Warehouse extends WorkPlace{
+public class Warehouse extends WorkPlace {
     // поля и конструкторы
+    @JsonProperty
     int ID;
+    @JsonProperty
     String name;
+    @JsonProperty
     ArrayList<WarehouseCell> Cells = new ArrayList<>();
+    @JsonProperty
     private static int quantityOfWarehouses = 0;
 
     public Warehouse(String name) {
@@ -104,5 +110,6 @@ public class Warehouse extends WorkPlace{
     public boolean isEmpty() {
         return this.workingEmployee == null;
     }
+    public Warehouse(){}
 
 }

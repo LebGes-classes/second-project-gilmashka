@@ -1,7 +1,12 @@
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Employee {
     //поля и конструктор
+    @JsonProperty
     int ID;
+    @JsonProperty
     String name;
+    @JsonProperty
     private static int quantityOfEmployees = 0;
 
     public Employee(String name) {
@@ -44,4 +49,5 @@ public class Employee {
     public String toString() {
         return name;
     }
+    public Employee(){}
 }

@@ -1,11 +1,18 @@
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.HashMap;
 
-public class SalesPoint extends WorkPlace{
+public class SalesPoint extends WorkPlace {
     //поля класса и конструкторы
+    @JsonProperty
     int ID;
+    @JsonProperty
     String name;
+    @JsonProperty
     HashMap<Product, Integer> salesProducts = new HashMap<>();
+    @JsonProperty
     int totalRevenue;
+    @JsonProperty
     private static int quantityOfSalesPoint;
 
     public SalesPoint(String name) {
@@ -124,4 +131,5 @@ public class SalesPoint extends WorkPlace{
     public boolean isEmpty() {
         return this.workingEmployee == null;
     }
+    public SalesPoint(){}
 }
