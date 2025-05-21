@@ -1,29 +1,59 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
-import java.io.IOException;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DataManager {
-    private static final String DATA_FILE = "data.json";
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final String DATA_FILE = "data.bin";
 
     public static void saveData(AppData data) {
-        try {
-            mapper.writeValue(new File(DATA_FILE), data);
-            System.out.println("Данные успешно сохранены в " + DATA_FILE);
+        try (Output output = new Output(new FileOutputStream(DATA_FILE))) {
+            Kryo kryo = new Kryo();
+
+
+            kryo.register(AppData.class);
+            kryo.register(ArrayList.class);
+            kryo.register(Warehouse.class);
+            kryo.register(SalesPoint.class);
+            kryo.register(Employee.class);
+            kryo.register(Product.class);
+            kryo.register(Customer.class);
+            kryo.register(WarehouseCell.class);
+            kryo.register(HashMap.class);
+
+            kryo.writeObject(output, data);
+            System.out.println("Данные сохранены в " + DATA_FILE);
         } catch (IOException e) {
-            System.err.println("Ошибка при сохранении данных: " + e.getMessage());
+            System.err.println("Ошибка при сохранении: " + e.getMessage());
         }
     }
 
     public static AppData loadData() {
-        try {
-            File file = new File(DATA_FILE);
-            if (file.exists()) {
-                return mapper.readValue(file, AppData.class);
-            }
-        } catch (IOException e) {
-            System.err.println("Ошибка при загрузке данных: " + e.getMessage());
+        File file = new File(DATA_FILE);
+        if (!file.exists()) {
+            return new AppData();
         }
-        return new AppData(); // Возвращаем новые данные, если файла нет
+
+        try (Input input = new Input(new FileInputStream(DATA_FILE))) {
+            Kryo kryo = new Kryo();
+
+
+            kryo.register(AppData.class);
+            kryo.register(ArrayList.class);
+            kryo.register(Warehouse.class);
+            kryo.register(SalesPoint.class);
+            kryo.register(Employee.class);
+            kryo.register(Product.class);
+            kryo.register(Customer.class);
+            kryo.register(WarehouseCell.class);
+            kryo.register(HashMap.class);
+
+            return kryo.readObject(input, AppData.class);
+        } catch (IOException e) {
+            System.err.println("Ошибка при загрузке: " + e.getMessage());
+            return new AppData();
+        }
     }
 }

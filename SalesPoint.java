@@ -52,7 +52,7 @@ public class SalesPoint extends WorkPlace {
     public void deliveryRequest(Warehouse warehouse, Product product, int quantity) {
         if(quantity >= 0 && !isEmpty()){
             if (warehouse.auxiliaryExtracting(product, quantity)) {
-                this.add(product, quantity);  // <-- Используем this
+                this.add(product, quantity);
                 System.out.println("успешно доставлен товар " + product.name + " в количестве " + quantity);
             } else {
                 System.out.println("ошибка: товар отсутствует на складе");
@@ -64,7 +64,7 @@ public class SalesPoint extends WorkPlace {
     //метод продажи товара
     public void saleOfProduct(Product product, int quantity, Customer customer) {
         if(quantity >= 0 && !isEmpty()){
-            if (this.extract(product, quantity) && quantity > 0) {  // Проверяем и удаляем товар
+            if (this.extract(product, quantity) && quantity > 0) {
                 this.totalRevenue += product.price * quantity;
                 customer.buy(product, quantity);
                 System.out.println("успешно продано " + quantity + " единиц товара: " + product.name +

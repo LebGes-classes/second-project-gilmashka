@@ -9,5 +9,7 @@ public class WarehouseCell {
         this.product = product;
         this.quantity = quantity;
     }
+    public WarehouseCell() {
+    }
 }
 

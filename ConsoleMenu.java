@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -395,7 +394,7 @@ public class ConsoleMenu {
             switch (productInput){
                 case 1: createProduct(); break;
                 case 2: addToWH(); break;
-                case 3: addTOSP(); break;
+                case 3: addToSP(); break;
                 case 4: sale(); break;
                 case 5: returnToSP(); break;
                 case 6: listPR(); break;
@@ -405,11 +404,9 @@ public class ConsoleMenu {
         }
     }
     private void createProduct(){
-        System.out.println("Введите сначала наименование продукта, а потом его цену, щатем его ID");
+        System.out.println("Введите сначала наименование продукта, а потом его цену");
         String inputName = scanner.nextLine();
         int inputQuantity = scanner.nextInt();
-        scanner.nextLine();
-        int inputID = scanner.nextInt();
         scanner.nextLine();
         appData.products.add(new Product(inputName, inputQuantity));
         System.out.println("успешно создано");
@@ -456,7 +453,7 @@ public class ConsoleMenu {
         addingWarehouse.addProduct(addingProduct, inputQuanity);
         System.out.println("успешно добавлено");
     }
-    private void addTOSP(){
+    private void addToSP(){
         System.out.println("выберите склад, с которого необходимо доставить товар, введя его имя");
         listWH();
         String inputWarehouse = scanner.nextLine();
@@ -604,22 +601,28 @@ public class ConsoleMenu {
 
 
     private void manageCustomers(){
-        System.out.println("1 ->Создать анкету покупателя\n" + "2 -> Показать список всех покупателей\n" + "0 -> Вернуться в главное меню");
-        int customerInput = scanner.nextInt();
-        scanner.nextLine();
-        switch (customerInput){
-            case 1:
-                System.out.println("введите имя покупателя");
-                String name = scanner.nextLine();
-                if(!name.isBlank()){
-                    appData.customers.add(new Customer(name));
-                    System.out.println("успешно добавлено");
-                }
-                else {
-                    System.out.println("имя покупателя не может быть пустой строкой"); return;}
-                break;
-            case 2: listCM(); break;
-            case 0: return;
+        while (true){
+            System.out.println("1 ->Создать анкету покупателя\n" + "2 -> Показать список всех покупателей\n" + "0 -> Вернуться в главное меню");
+            int customerInput = scanner.nextInt();
+            scanner.nextLine();
+            switch (customerInput) {
+                case 1:
+                    System.out.println("введите имя покупателя");
+                    String name = scanner.nextLine();
+                    if (!name.isBlank()) {
+                        appData.customers.add(new Customer(name));
+                        System.out.println("успешно добавлено");
+                    } else {
+                        System.out.println("имя покупателя не может быть пустой строкой");
+                        return;
+                    }
+                    break;
+                case 2:
+                    listCM();
+                    break;
+                case 0:
+                    return;
+            }
         }
     }
     private void listCM(){
